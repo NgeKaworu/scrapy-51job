@@ -65,7 +65,7 @@ class MongoPipeline(object):
             newValue = re.sub(i[0], i[1], newValue)
 
         topWord = jieba.analyse.extract_tags(
-            newValue, topK=50, withWeight=True, allowPOS=allowPOS)
+            newValue, topK=150, withWeight=True, allowPOS=allowPOS)
         return [ {'word': i[0], 'count': i[1] } for i in topWord]
 
     @classmethod
