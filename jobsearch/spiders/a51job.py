@@ -6,7 +6,7 @@ from jobsearch.items import JobsearchItem
 class A51jobSpider(scrapy.Spider):
     name = '51job'
     allowed_domains = ['m.51job.com']
-    start_urls = ['https://m.51job.com/search/joblist.php?funtype=0107']
+    start_urls = ['https://m.51job.com/search/joblist.php?funtype=0107&jobarea=030600']
 
     def parse(self, response):
         item = JobsearchItem()

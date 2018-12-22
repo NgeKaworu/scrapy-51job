@@ -5,7 +5,7 @@ from jobsearch.items import JobsearchItem
 class FrontendSpider(scrapy.Spider):
     name = 'frontend'
     allowed_domains = ['m.51job.com']
-    start_urls = ['https://m.51job.com/search/joblist.php?keyword=%E5%89%8D%E7%AB%AF']
+    start_urls = ['https://m.51job.com/search/joblist.php?keyword=%E5%89%8D%E7%AB%AF&jobarea=030600']
 
     def parse(self, response):
         for href in response.css('.e.eck').xpath('./@href'):
