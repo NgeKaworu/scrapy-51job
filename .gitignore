@@ -1,0 +1,15 @@
+dbs/
+
+eggs/
+*.egg-info/
+
+logs/
+
+*.pyc
+__pycache__/
+
+dist/
+build/
+
+*.cfg
+settings.py
