@@ -6,8 +6,8 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import re
 import pymongo
-import time
 import jieba.analyse
+from datetime import datetime
 from scrapy.exceptions import DropItem
 
 
@@ -43,6 +43,7 @@ class MongoPipeline(object):
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
+        self.createDate = datetime.now().strftime('%Y/%m/%d')
         self.cloud = ''
         self.detail = ''
         self.synonym = [
@@ -84,8 +85,10 @@ class MongoPipeline(object):
             self.cloud += item['title']
 
         if spider.name == 'frontend':
+            self.db['front'].insert(
+                {**item, "createTime": self.createDate},
+            )
             self.detail += item['detail']
-
         return item
 
     def close_spider(self, spider):
@@ -93,8 +96,18 @@ class MongoPipeline(object):
             self.db['cloud'].insert_many(self._analyse(
                 self.cloud, self.synonym, allowPOS=('eng', 'f')))
 
+        # 这里是相当于做成缓存放一个新表
+        # 更好的做法是在api那里调用时做计算
+        # 然后缓存到redis中
         if spider.name == 'frontend':
-            self.db['detail'].insert_many(self._analyse(
-                self.detail, self.synonym, allowPOS=('eng',)))
+            self.db['frontdetail'].update(
+                {"createTime": self.createDate},
+                {"$set": {
+                    "createTime": self.createDate,
+                    "classify": self._analyse(self.detail, self.synonym, allowPOS=('eng',)),
+                },
+                },
+                True
+            )
 
         self.client.close()
