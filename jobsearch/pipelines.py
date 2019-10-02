@@ -66,7 +66,7 @@ class MongoPipeline(object):
 
         topWord = jieba.analyse.extract_tags(
             newValue, topK=50, withWeight=True, allowPOS=allowPOS)
-        return [ {'word': i[0], 'count': i[1] } for i in topWord]
+        return [{'word': i[0], 'count': i[1]} for i in topWord]
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -90,9 +90,11 @@ class MongoPipeline(object):
 
     def close_spider(self, spider):
         if spider.name == '51job':
-            self.db['cloud'].insert_many(self._analyse(self.cloud, self.synonym, allowPOS=('eng', 'f')))
+            self.db['cloud'].insert_many(self._analyse(
+                self.cloud, self.synonym, allowPOS=('eng', 'f')))
 
         if spider.name == 'frontend':
-            self.db['detail'].insert_many(self._analyse(self.detail, self.synonym, allowPOS=('eng',)))
+            self.db['detail'].insert_many(self._analyse(
+                self.detail, self.synonym, allowPOS=('eng',)))
 
         self.client.close()

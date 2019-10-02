@@ -13,3 +13,5 @@ class JobsearchItem(scrapy.Item):
     # name = scrapy.Field()
     title = scrapy.Field()
     detail = scrapy.Field()
+    salary = scrapy.Field()
+    experience = scrapy.Field()
