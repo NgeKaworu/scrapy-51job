@@ -13,3 +13,5 @@ build/
 
 *.cfg
 settings.py
+
+.vscode
